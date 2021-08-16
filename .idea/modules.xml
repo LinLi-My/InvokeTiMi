@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/InvokeTiMi.iml" filepath="$PROJECT_DIR$/InvokeTiMi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TiMi.iml" filepath="$PROJECT_DIR$/TiMi.iml" />
     </modules>
   </component>
 </project>
