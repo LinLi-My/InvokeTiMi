@@ -1,50 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ml.timi.mapper.LogMapper">
+<mapper namespace="com.ml.timi.mapper.log.ResponseTemplateMapper">
 
-    <resultMap type="com.ml.timi.model.log.request.RequestTemplate" id="RequestTemplateMap">
+    <resultMap type="com.ml.timi.model.log.response.ResponseTemplate" id="RsponseTemplateMap">
         <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
         <result property="module" column="module" jdbcType="VARCHAR"/>
-        <result property="requestStatus" column="request_status" jdbcType="VARCHAR"/>
-        <result property="requestStatusMessage" column="request_status_message" jdbcType="VARCHAR"/>
-        <result property="requestTime" column="request_time" jdbcType="TIMESTAMP"/>
-        <result property="requestBodyCount" column="request_body_count" jdbcType="INTEGER"/>
-        <result property="requestBody" column="request_body" jdbcType="VARCHAR"/>
-        <!-- <result property="responseTime" column="response_time" jdbcType="TIMESTAMP"/>
+         <result property="responseTime" column="response_time" jdbcType="TIMESTAMP"/>
          <result property="responseStatus" column="response_status" jdbcType="VARCHAR"/>
          <result property="responseStatusMessage" column="response_status_message" jdbcType="VARCHAR"/>
          <result property="responseCount" column="response_count" jdbcType="INTEGER"/>
          <result property="responseSuccessCount" column="response_success_count" jdbcType="INTEGER"/>
          <result property="responseErrorCount" column="response_error_count" jdbcType="INTEGER"/>
-         <result property="responseBody" column="response_body" jdbcType="VARCHAR"/>-->
+         <result property="responseTemplateBody" column="response_template_body" jdbcType="VARCHAR"/>
         <result property="id" column="id" jdbcType="INTEGER"/>
     </resultMap>
 
-    <sql id="Log_Base_Column_List">
-        batch_id, module, request_status, request_status_message, request_time,request_count, request_body,
-        response_time, response_status,response_status_message, response_count,
-        response_success_count,response_error_count, response_body
-    </sql>
-
-    <sql id="Log_requestTemp_Column_List">
-        batch_id, module, request_status, request_status_message, request_time,request_body_count, request_body
-    </sql>
-
     <sql id="Log_ResponseTemp_Column_List">
-        batch_id, module, request_status, request_status_message, request_time,request_count, request_body,
-        response_time, response_status,response_status_message, response_count,
-        response_success_count,response_error_count, response_body
+        batch_id, module, response_time, response_status,response_status_message,
+        response_count, response_success_count,response_error_count, response_body
     </sql>
 
-    <!--新增RequestTemplate(request)所有列-->
-    <insert id="insertRequestTemplate" keyProperty="id" useGeneratedKeys="true">
-        insert into request_template
-        (<include refid="Log_requestTemp_Column_List"/>)
-        values
-        (#{batchId}, #{module}, #{requestStatus}, #{requestStatusMessage}, #{requestTime}, #{requestBodyCount},
-        #{requestBody})
-
-    </insert>
+    <update id="updateResponseTemplateError">
+        update timi.request_template
+        <set>
+            <if test="module != null and module != ''">
+                module = #{module},
+            </if>
+            <if test="responseTime != null">
+                response_time = #{responseTime},
+            </if>
+            <if test="responseStatus != null and responseStatus != ''">
+                response_status = #{responseStatus},
+            </if>
+            <if test="responseStatusMessage != null and responseStatusMessage != ''">
+                response_status_message = #{responseStatusMessage},
+            </if>
+            <if test="responseCount != null">
+                response_count = #{responseCount},
+            </if>
+            <if test="responseSuccessCount != null">
+                response_success_count = #{responseSuccessCount},
+            </if>
+            <if test="responseErrorCount != null">
+                response_error_count = #{responseErrorCount},
+            </if>
+            <if test="responseTemplateBody != null and responseTemplateBody != ''">
+                response_template_body = #{responseTemplateBody},
+            </if>
+        </set>
+        where batch_id = #{batchId}
+    </update>
 
     <!-- &lt;!&ndash;查询单个&ndash;&gt;
      <select id="queryById" resultMap="RequestTemplateMap">

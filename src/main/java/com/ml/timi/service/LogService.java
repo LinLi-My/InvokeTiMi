@@ -1,6 +1,7 @@
 package com.ml.timi.service;
 
 import com.ml.timi.model.log.request.RequestTemplate;
+import com.ml.timi.model.log.response.ResponseTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,6 +22,14 @@ public interface LogService {
      * @return 实例对象
      */
     RequestTemplate insertRequestTemplate(RequestTemplate requestTemplate);
+
+    /**
+     * 修改响应报错数据
+     *
+     * @param responseTemplateError 实例对象
+     * @return 实例对象
+     */
+    ResponseTemplate updateResponseTemplateError(ResponseTemplate responseTemplateError);
 
     /**
      * 新增

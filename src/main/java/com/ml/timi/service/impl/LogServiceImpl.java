@@ -1,8 +1,10 @@
 package com.ml.timi.service.impl;
 
 
-import com.ml.timi.mapper.LogMapper;
+import com.ml.timi.mapper.log.RequestTemplateMapper;
+import com.ml.timi.mapper.log.ResponseTemplateMapper;
 import com.ml.timi.model.log.request.RequestTemplate;
+import com.ml.timi.model.log.response.ResponseTemplate;
 import com.ml.timi.service.LogService;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,9 @@ import javax.annotation.Resource;
 public class LogServiceImpl implements LogService {
 
     @Resource
-    private LogMapper logMapper;
+    private RequestTemplateMapper requestTemplateMapper;
+    @Resource
+    private ResponseTemplateMapper responseTemplateMapper;
     /**
      * 新增数据
      *
@@ -27,8 +31,14 @@ public class LogServiceImpl implements LogService {
      */
     @Override
     public RequestTemplate insertRequestTemplate(RequestTemplate requestTemplate) {
-        logMapper.insertRequestTemplate(requestTemplate);
+        requestTemplateMapper.insertRequestTemplate(requestTemplate);
         return requestTemplate;
+    }
+
+    @Override
+    public ResponseTemplate updateResponseTemplateError(ResponseTemplate responseTemplateError) {
+        responseTemplateMapper.updateResponseTemplateError(responseTemplateError);
+        return responseTemplateError;
     }
 
    /* @Override

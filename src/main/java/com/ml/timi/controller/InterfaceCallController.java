@@ -11,7 +11,7 @@ import com.ml.timi.config.template.Module;
 import com.ml.timi.config.template.Status;
 import com.ml.timi.config.webservices.WebServiceCallConfig;
 import com.ml.timi.config.webservices.WebServiceCallMethodConfig;
-import com.ml.timi.mapper.LogMapper;
+import com.ml.timi.mapper.log.RequestTemplateMapper;
 import com.ml.timi.mapper.UserMapper;
 import com.ml.timi.model.entity.User;
 import com.ml.timi.model.log.request.RequestTemplate;
@@ -42,7 +42,7 @@ public class InterfaceCallController {
     @Resource
     LogService logService;
     @Resource
-    LogMapper logMapper;
+    RequestTemplateMapper logMapper;
     @Resource
     UserMapper userMapper;
     @Resource
@@ -107,21 +107,19 @@ public class InterfaceCallController {
         batchId = UUID.randomUUID().toString();
 
         List<User> requestBodyList = userMapper.searchDataList();
-        if (ObjectUtils.isEmpty(requestBodyList)) {
-            return "暂无数据";
-        }
-        String requestBody = JSONUtil.objectToJson(requestBodyList);
-
         //将数据插入中间表
         userMapper.insertDataList(requestBodyList);
         int requestBodyCount = requestBodyList.size();
 
+        if (ObjectUtils.isEmpty(requestBodyList)) {
+            return "暂无数据";
+        }
+
+        //将请求体数据转换为JSON
+        String requestBody = JSONUtil.objectToJson(requestBodyList);
         /**
          * 组装请求数据
          */
-        requestTemplate = new RequestTemplate();
-
-
         requestTemplate = new RequestTemplate.RequestTemplateBuilder()
                 .setBatchId(batchId)                 //批次标识
                 .setModule(Module.INPUT)                  //模块
@@ -132,7 +130,7 @@ public class InterfaceCallController {
                 .setRequestStatusMessage("成功")    //请求状态信息
                 .setRequestBody(requestBody)          //请求体数据
                 .build();
-        //将下传数据转换为JSON
+        //将请求数据转换为JSON
         requestData = JSONUtil.objectToJson(requestTemplate);
         //将下传数据用MD5加密
         MD5Encrypt = CommonUtils.MD5Encrypt(requestData);
@@ -155,9 +153,10 @@ public class InterfaceCallController {
                     .setResponseStatus(Status.ERROR)
                     .setResponseStatusMessage(ExceptionMessage)
                     .build();
+            //记录响应失败数据日志
             LOGGER.error(responseTemplateError.toString());
             //根据batchId更新请求后的失败响应数据
-            //xxxxxxxxx
+            logService.updateResponseTemplateError(responseTemplateError);
             throw e;
         }
 
@@ -175,10 +174,9 @@ public class InterfaceCallController {
             String STATUS = responseTemplateBody.getStatus();
             String MESSAGE = responseTemplateBody.getMessage();
             if (StringUtils.isNoneBlank(NATURALKEY, STATUS, MESSAGE)) {
+                //根据状态更新原数据状态
 
-
-                //根据状态更新元数据状态
-
+                //int aa =
                 //插入日志
 
                 //数据库日志更新

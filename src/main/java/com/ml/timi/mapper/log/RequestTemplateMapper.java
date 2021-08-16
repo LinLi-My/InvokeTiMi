@@ -1,4 +1,4 @@
-package com.ml.timi.mapper;
+package com.ml.timi.mapper.log;
 
 
 import com.ml.timi.model.log.request.RequestTemplate;
@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2021-08-13 14:05:13
  */
 @Mapper
-public interface LogMapper {
+public interface RequestTemplateMapper {
 
 
     /**
@@ -22,15 +22,16 @@ public interface LogMapper {
      */
     int insertRequestTemplate(RequestTemplate requestTemplate);
 
+
     /**
      * 新增数据
      *
      * @param responseBody 实例对象
      * @return 影响行数
      */
-   // int insertResponseBody(List<ResponseBody> responseBody);
+    // int insertResponseBody(List<ResponseBody> responseBody);
 
-   /* *//**
+    /* *//**
      * 通过ID查询单条数据
      *
      * @param id 主键
