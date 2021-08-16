@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MybatisBuilder.project.settings">
+    <option name="connectionInfoList">
+      <list>
+        <ConnectionInfo>
+          <option name="database" value="" />
+          <option name="description" value="" />
+          <option name="driverClass" value="" />
+          <option name="driverLibrary" value="" />
+          <option name="driverType" value="MySQL" />
+          <option name="host" value="121.89.235.74" />
+          <option name="id" value="1e27e826467349048710eeabae8ecdd0" />
+          <option name="name" value="TiMi" />
+          <option name="port" value="3306" />
+          <option name="url" value="" />
+          <option name="userName" value="root" />
+        </ConnectionInfo>
+      </list>
+    </option>
+    <option name="defaultParameters">
+      <DefaultParameters>
+        <option name="renameConfig">
+          <Config>
+            <option name="mapperTypePattern" value="" />
+            <option name="exampleTypePattern" value="" />
+            <option name="sqlFileNamePattern" value="" />
+          </Config>
+        </option>
+        <option name="selectWithLockConfig">
+          <SelectWithLockConfig>
+            <option name="byPrimaryKeyWithLockOverride" value="" />
+            <option name="byExampleWithLockOverride" value="" />
+            <option name="byExampleWithLockEnabled" value="true" />
+          </SelectWithLockConfig>
+        </option>
+      </DefaultParameters>
+    </option>
+    <option name="historyMap">
+      <map>
+        <entry key="JAVA_CLIENT_PACKAGE">
+          <value>
+            <list>
+              <option value="mapper" />
+            </list>
+          </value>
+        </entry>
+        <entry key="JAVA_MODEL_PACKAGE">
+          <value>
+            <list>
+              <option value="model" />
+            </list>
+          </value>
+        </entry>
+        <entry key="SQL_MAP_PACKAGE">
+          <value>
+            <list>
+              <option value="sqlmap" />
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="lastGeneratorParamWrapper">
+      <GeneratorParamWrapper>
+        <option name="beginningDelimiter" value="" />
+        <option name="defaultTableConfigWrapper">
+          <TableConfigurationWrapper>
+            <option name="domainObjectRenamingRule">
+              <DomainObjectRenamingRule>
+                <option name="replaceString" value="" />
+                <option name="searchString" value="" />
+              </DomainObjectRenamingRule>
+            </option>
+            <option name="generatedKeyWrapper">
+              <GeneratedKeyWrapper>
+                <option name="column" value="" />
+                <option name="identity" value="true" />
+                <option name="statement" value="MYSQL" />
+                <option name="type" value="" />
+              </GeneratedKeyWrapper>
+            </option>
+          </TableConfigurationWrapper>
+        </option>
+        <option name="endingDelimiter" value="" />
+        <option name="javaClientConfig">
+          <JavaClientGeneratorConfiguration>
+            <option name="configurationType" value="XMLMAPPER" />
+            <option name="targetPackage" value="mapper" />
+            <option name="targetProject" value="$PROJECT_DIR$/src/main/java" />
+          </JavaClientGeneratorConfiguration>
+        </option>
+        <option name="javaModelConfig">
+          <JavaModelGeneratorConfiguration>
+            <option name="targetPackage" value="model" />
+            <option name="targetProject" value="$PROJECT_DIR$/src/main/java" />
+          </JavaModelGeneratorConfiguration>
+        </option>
+        <option name="selectedPlugins">
+          <map>
+            <entry key="com.chuntung.plugin.mybatis.builder.generator.plugins.ExampleRowBoundsPlugin" />
+            <entry key="com.chuntung.plugin.mybatis.builder.generator.plugins.LombokPlugin" />
+            <entry key="com.chuntung.plugin.mybatis.builder.generator.plugins.selectwithlock.SelectWithLockPlugin">
+              <value>
+                <PluginConfigWrapper>
+                  <option name="json" value="{&quot;byPrimaryKeyWithLockOverride&quot;:&quot;&quot;,&quot;byExampleWithLockOverride&quot;:&quot;&quot;,&quot;byPrimaryKeyWithLockEnabled&quot;:true,&quot;byExampleWithLockEnabled&quot;:true}" />
+                  <option name="type" value="com.chuntung.plugin.mybatis.builder.generator.plugins.selectwithlock.SelectWithLockConfig" />
+                </PluginConfigWrapper>
+              </value>
+            </entry>
+          </map>
+        </option>
+        <option name="selectedTables">
+          <list>
+            <TableInfo>
+              <option name="database" value="timi" />
+              <option name="domainName" value="Log" />
+              <option name="tableComment" value="æ—¥å¿—è®°å½•è¡¨" />
+              <option name="tableName" value="log" />
+            </TableInfo>
+          </list>
+        </option>
+        <option name="sqlMapConfig">
+          <SqlMapGeneratorConfiguration>
+            <option name="targetPackage" value="sqlmap" />
+            <option name="targetProject" value="$PROJECT_DIR$/src/main/resources" />
+          </SqlMapGeneratorConfiguration>
+        </option>
+        <option name="targetRuntime" value="MyBatis3Simple" />
+      </GeneratorParamWrapper>
+    </option>
+    <option name="tableInfoMap">
+      <map>
+        <entry key="timi#chapter">
+          <value>
+            <TableInfo>
+              <option name="database" value="timi" />
+              <option name="domainName" value="Chapter" />
+              <option name="tableComment" value="ç« èŠ‚è¡¨" />
+              <option name="tableName" value="chapter" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="timi#episode">
+          <value>
+            <TableInfo>
+              <option name="database" value="timi" />
+              <option name="domainName" value="Episode" />
+              <option name="tableComment" value="ç« èŠ‚å­�è¡¨" />
+              <option name="tableName" value="episode" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="timi#log">
+          <value>
+            <TableInfo>
+              <option name="database" value="timi" />
+              <option name="domainName" value="Log" />
+              <option name="tableComment" value="æ—¥å¿—è®°å½•è¡¨" />
+              <option name="tableName" value="log" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="timi#play_record">
+          <value>
+            <TableInfo>
+              <option name="database" value="timi" />
+              <option name="domainName" value="PlayRecord" />
+              <option name="tableComment" value="" />
+              <option name="tableName" value="play_record" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="timi#request_template">
+          <value>
+            <TableInfo>
+              <option name="database" value="timi" />
+              <option name="domainName" value="RequestTemplate" />
+              <option name="tableComment" value="è¯·æ±‚å¤´æ—¥å¿—" />
+              <option name="tableName" value="request_template" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="timi#user">
+          <value>
+            <TableInfo>
+              <option name="database" value="timi" />
+              <option name="domainName" value="User" />
+              <option name="tableComment" value="ç”¨æˆ·è¡¨" />
+              <option name="tableName" value="user" />
+            </TableInfo>
+          </value>
+        </entry>
+        <entry key="timi#user_test">
+          <value>
+            <TableInfo>
+              <option name="database" value="timi" />
+              <option name="domainName" value="UserTest" />
+              <option name="tableComment" value="ç”¨æˆ·ä¸­é—´è¡¨" />
+              <option name="tableName" value="user_test" />
+            </TableInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
