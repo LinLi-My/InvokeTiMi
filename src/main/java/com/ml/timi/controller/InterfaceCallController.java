@@ -7,6 +7,10 @@
  */
 package com.ml.timi.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import com.ml.timi.config.template.Module;
 import com.ml.timi.config.template.Status;
 import com.ml.timi.config.webservices.WebServiceCallConfig;
@@ -21,6 +25,7 @@ import com.ml.timi.service.LogService;
 import com.ml.timi.utils.CommonUtils;
 import com.ml.timi.utils.ExpertionLin;
 import com.ml.timi.utils.JSONUtil;
+import com.ml.timi.utils.LocalDateTimeAdapter;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.endpoint.Client;
@@ -106,6 +111,14 @@ public class InterfaceCallController {
         methodName = WebServiceCallMethodConfig.registerList;
         batchId = UUID.randomUUID().toString();
 
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting() //格式化输出的json
+                .serializeNulls()    //有NULL值是也进行解析
+                .disableHtmlEscaping()  //解析特殊符号
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())   ////为某特定对象设置固定的序列或反序列方式，自定义Adapter需实现JsonSerializer或者JsonDeserializer接口序列化[LocalDateTime的解析]
+                .registerTypeAdapter(JsonElement.class, new LocalDateTimeAdapter())     //反序列化LocalDateTime(String——>LocalDateTime)的解析
+                .create();
+
         List<User> requestBodyList = userMapper.searchDataList();
         //将数据插入中间表
         userMapper.insertDataList(requestBodyList);
@@ -116,7 +129,7 @@ public class InterfaceCallController {
         }
 
         //将请求体数据转换为JSON
-        String requestBody = JSONUtil.objectToJson(requestBodyList);
+        String requestBody = gson.toJson(requestBodyList);
         /**
          * 组装请求数据
          */
@@ -131,7 +144,7 @@ public class InterfaceCallController {
                 .setRequestBody(requestBody)          //请求体数据
                 .build();
         //将请求数据转换为JSON
-        requestData = JSONUtil.objectToJson(requestTemplate);
+        requestData = gson.toJson(requestTemplate);
         //将下传数据用MD5加密
         MD5Encrypt = CommonUtils.MD5Encrypt(requestData);
         //下传前插入日志
@@ -163,11 +176,13 @@ public class InterfaceCallController {
 
         //处理接口返回数据
         responseData = responseDataBack[0].toString();
-        ResponseTemplate responseTemplate = JSONUtil.jsonToEntity(responseData, ResponseTemplate.class);
+        ResponseTemplate responseTemplate = gson.fromJson(responseData, ResponseTemplate.class);
         LOGGER.info(responseTemplate.toString());
         //根据batchId更新请求后的响应数据
 
-        List<ResponseTemplateBody> responseTemplateBodyList = JSONUtil.jsonToList(responseTemplate.getResponseTemplateBody(),ResponseTemplateBody.class);
+        List<ResponseTemplateBody> responseTemplateBodyList = gson.fromJson(responseTemplate.getResponseTemplateBody(),
+                new TypeToken<List<ResponseTemplateBody>>() {
+                }.getType());
 
         for (ResponseTemplateBody responseTemplateBody : responseTemplateBodyList) {
             String NATURALKEY = responseTemplateBody.getNaturalKey();
@@ -182,7 +197,7 @@ public class InterfaceCallController {
                 //数据库日志更新
 
 
-       }
+            }
         }
 
 
@@ -193,7 +208,6 @@ public class InterfaceCallController {
         responseTemplate.getResponseErrorCount();
         responseTemplate.getResponseSuccessCount();
         responseTemplate.getResponseTime();*/
-
 
 
         return "1";
