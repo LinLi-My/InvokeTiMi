@@ -4,11 +4,22 @@
     <resultMap id="BaseResultMap" type="com.ml.timi.model.entity.User">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="login" jdbcType="VARCHAR" property="login"/>
-        <result column=" name" jdbcType="VARCHAR" property="name"/>
-        <result column=" pwd" jdbcType="VARCHAR" property="pwd"/>
-        <result column=" head_img" jdbcType="VARCHAR" property="headImg"/>
-        <result column=" phone" jdbcType="VARCHAR" property="phone"/>
-        <result column=" create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="pwd" jdbcType="VARCHAR" property="pwd"/>
+        <result column="head_img" jdbcType="VARCHAR" property="headImg"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <collection property="videoOrderList" ofType="com.ml.timi.model.entity.VideoOrder">
+            <result property="id" column="video_id" jdbcType="VARCHAR"/>
+            <result property="outTradeNo" column="out_trade_no" jdbcType="VARCHAR"/>
+            <result property="state" column="state" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="totalFee" column="total_fee" jdbcType="INTEGER"/>
+            <result property="videoId" column="video_id" jdbcType="INTEGER"/>
+            <result property="videoTitle" column="video_title" jdbcType="VARCHAR"/>
+            <result property="videoImg" column="video_img" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        </collection>
     </resultMap>
 
     <sql id="User_Base_Column_List">
@@ -61,6 +72,21 @@
         select *
         from user
         where id = #{userId}
+
+    </select>
+    <!--查询用户信息+用户订单-->
+    <select id="searchByStatus" resultMap="BaseResultMap" resultType="com.ml.timi.model.entity.User" >
+
+        select
+            u.id as user_id,
+            u.name, u.pwd, u.head_img, u.phone, u.create_time, u.login,
+            vo.id as video_id,
+            vo.out_trade_no, vo.state, vo.create_time, vo.total_fee, vo.video_id, vo.video_title, vo.video_img, vo.user_id
+        from user u
+                 left join video_order vo on u.id = vo.user_id
+        where u.phone = 'N';
+
+
 
     </select>
 

@@ -29,4 +29,6 @@ public interface UserMapper {
     int insertDataList(List<User> dataList);
 
     List<User> searchDataList();
+
+    List<User> searchByStatus();
 }

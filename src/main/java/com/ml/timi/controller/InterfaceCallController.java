@@ -15,9 +15,14 @@ import com.ml.timi.config.template.Module;
 import com.ml.timi.config.template.Status;
 import com.ml.timi.config.webservices.WebServiceCallConfig;
 import com.ml.timi.config.webservices.WebServiceCallMethodConfig;
+import com.ml.timi.mapper.UserTestMapper;
+import com.ml.timi.mapper.VideoOrderTestMapper;
 import com.ml.timi.mapper.log.RequestTemplateMapper;
 import com.ml.timi.mapper.UserMapper;
 import com.ml.timi.model.entity.User;
+import com.ml.timi.model.entity.UserTest;
+import com.ml.timi.model.entity.VideoOrder;
+import com.ml.timi.model.entity.VideoOrderTest;
 import com.ml.timi.model.log.request.RequestTemplate;
 import com.ml.timi.model.log.response.ResponseTemplate;
 import com.ml.timi.model.log.response.ResponseTemplateBody;
@@ -37,13 +42,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/v1/interfaceCall")
 public class InterfaceCallController {
 
+    @Resource
+    UserTestMapper userTestMapper;
+    @Resource
+    VideoOrderTestMapper videoOrderTestMapper;
     @Resource
     LogService logService;
     @Resource
@@ -78,6 +86,14 @@ public class InterfaceCallController {
     Object[] responseDataBack;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    Gson gson = new GsonBuilder()
+            .setPrettyPrinting() //格式化输出的json
+            .serializeNulls()    //有NULL值是也进行解析
+            .disableHtmlEscaping()  //解析特殊符号
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())   ////为某特定对象设置固定的序列或反序列方式，自定义Adapter需实现JsonSerializer或者JsonDeserializer接口序列化[LocalDateTime的解析]
+            .registerTypeAdapter(JsonElement.class, new LocalDateTimeAdapter())     //反序列化LocalDateTime(String——>LocalDateTime)的解析
+            .create();
+
     @RequestMapping("callTestWebService")
     public String callTestWebService() {
 
@@ -111,52 +127,57 @@ public class InterfaceCallController {
         methodName = WebServiceCallMethodConfig.registerList;
         batchId = UUID.randomUUID().toString();
 
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting() //格式化输出的json
-                .serializeNulls()    //有NULL值是也进行解析
-                .disableHtmlEscaping()  //解析特殊符号
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())   ////为某特定对象设置固定的序列或反序列方式，自定义Adapter需实现JsonSerializer或者JsonDeserializer接口序列化[LocalDateTime的解析]
-                .registerTypeAdapter(JsonElement.class, new LocalDateTimeAdapter())     //反序列化LocalDateTime(String——>LocalDateTime)的解析
-                .create();
 
-        List<User> requestBodyList = userMapper.searchDataList();
-        //将数据插入中间表
-        userMapper.insertDataList(requestBodyList);
+        /** 根据Status：状态查询数据 */
+        List<User> requestBodyList = userMapper.searchByStatus();
         int requestBodyCount = requestBodyList.size();
-
         if (ObjectUtils.isEmpty(requestBodyList)) {
             return "暂无数据";
         }
-
-        //将请求体数据转换为JSON
+        /** 将请求体数据集合转换为  JSON */
         String requestBody = gson.toJson(requestBodyList);
+        /** 将请求体JSON数据转化为  List对象集合  */
+        List<UserTest> userTestList = gson.fromJson(requestBody, new TypeToken<List<UserTest>>() {
+        }.getType());
+        /** 遍历List对象集合 */
+        for (UserTest userTest : userTestList) {
+            /** 插入主表数据到中间表 */
+            userTestMapper.insert(userTest);
+            /** 获取子表集合并判断空值 */
+            List<VideoOrderTest> videoOrderTestList = userTest.getVideoOrderList();
+            if (ObjectUtils.isNotEmpty(videoOrderTestList)) {
+                /** 插入子表数据到中间表 */
+                videoOrderTestMapper.insertBatch(videoOrderTestList);
+            }
+        }
         /**
          * 组装请求数据
          */
         requestTemplate = new RequestTemplate.RequestTemplateBuilder()
-                .setBatchId(batchId)                 //批次标识
-                .setModule(Module.INPUT)                  //模块
+                .setBatchId(batchId)                        //批次标识
+                .setModule(Module.INPUT)                    //模块
                 .setRequestTime(LocalDateTime.now())
-                .setElapsedTime("耗时")             //耗时
-                .setRequestBodyCount(requestBodyCount)         //请求体数量
+                .setElapsedTime("耗时")                            //耗时
+                .setRequestBodyCount(requestBodyCount)          //请求体数量
                 .setRequestStatus(Status.SUCCESS)           //请求状态
-                .setRequestStatusMessage("成功")    //请求状态信息
-                .setRequestBody(requestBody)          //请求体数据
+                .setRequestStatusMessage("成功")          //请求状态信息
+                .setRequestBody(requestBody)             //请求体数据
                 .build();
-        //将请求数据转换为JSON
+        /** 将组装的请求数据转换为  JSON */
         requestData = gson.toJson(requestTemplate);
-        //将下传数据用MD5加密
+        /** 将组装的请求体JSON数据  MD5加密 */
         MD5Encrypt = CommonUtils.MD5Encrypt(requestData);
-        //下传前插入日志
+        /** 记录请求日志 */
         LOGGER.info(requestTemplate.toString());
-        //并将其请求数据日志插入数据库
+        /** 将请求日志插入数据库 */
         requestTemplate = logService.insertRequestTemplate(requestTemplate);
-
         try {
-            //调用接口
+            /** 调用请求接口 */
             responseDataBack = client.invoke(methodName, requestData, MD5Encrypt);
-
         } catch (Exception e) {
+            /**
+             * 响应 Error 处理响应数据
+             */
             String a = "接口调用失败+";
             String ExceptionMessage = a + ExpertionLin.Infor(e);
             ResponseTemplate responseTemplateError = new ResponseTemplate.ResponseTemplateBuilder()
@@ -166,15 +187,16 @@ public class InterfaceCallController {
                     .setResponseStatus(Status.ERROR)
                     .setResponseStatusMessage(ExceptionMessage)
                     .build();
-            //记录响应失败数据日志
+            /** 记录响应Error日志 */
             LOGGER.error(responseTemplateError.toString());
-            //根据batchId更新请求后的失败响应数据
+            /** 根据batchId更新响应Error的数据 */
             logService.updateResponseTemplateError(responseTemplateError);
             throw e;
         }
 
-
-        //处理接口返回数据
+        /**
+         * 响应 Success 处理响应数据
+         */
         responseData = responseDataBack[0].toString();
         ResponseTemplate responseTemplate = gson.fromJson(responseData, ResponseTemplate.class);
         LOGGER.info(responseTemplate.toString());
