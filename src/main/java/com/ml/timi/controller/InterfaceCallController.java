@@ -187,9 +187,9 @@ public class InterfaceCallController {
                     .setResponseStatus(Status.ERROR)
                     .setResponseStatusMessage(ExceptionMessage)
                     .build();
-            /** 记录响应Error日志 */
+            /** 记录响应 Error 日志 */
             LOGGER.error(responseTemplateError.toString());
-            /** 根据batchId更新响应Error的数据 */
+            /** 根据 batchId 更新响应 Error 的数据 */
             logService.updateResponseTemplateError(responseTemplateError);
             throw e;
         }
@@ -198,10 +198,14 @@ public class InterfaceCallController {
          * 响应 Success 处理响应数据
          */
         responseData = responseDataBack[0].toString();
+        /** 将响应数据转化为 实体对象 */
         ResponseTemplate responseTemplate = gson.fromJson(responseData, ResponseTemplate.class);
+        /** 记录响应日志 */
         LOGGER.info(responseTemplate.toString());
-        //根据batchId更新请求后的响应数据
+        /** 根据 batchId 更新响应 Sccess 的数据 */
+        //1、更新整个响应
 
+        //2、更新响应体
         List<ResponseTemplateBody> responseTemplateBodyList = gson.fromJson(responseTemplate.getResponseTemplateBody(),
                 new TypeToken<List<ResponseTemplateBody>>() {
                 }.getType());
