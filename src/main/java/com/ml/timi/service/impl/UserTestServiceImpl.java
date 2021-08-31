@@ -2,6 +2,7 @@ package com.ml.timi.service.impl;
 
 import com.ml.timi.model.entity.UserTest;
 import com.ml.timi.mapper.UserTestMapper;
+import com.ml.timi.model.log.response.ResponseBody;
 import com.ml.timi.service.UserTestService;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * 用户中间表(UserTest)表服务实现类
  *
  * @author Lin
- * @since 2021-08-25 14:52:01
+ * @since 2021-08-27 17:00:50
  */
 @Service("userTestService")
 public class UserTestServiceImpl implements UserTestService {
@@ -41,7 +42,7 @@ public class UserTestServiceImpl implements UserTestService {
      * @return 实例对象
      */
     @Override
-    public UserTest searchById(BigInteger id) {
+    public UserTest searchById(int id) {
         return this.userTestMapper.searchById(id);
     }
 
@@ -101,6 +102,18 @@ public class UserTestServiceImpl implements UserTestService {
     public UserTest update(UserTest userTest) {
         this.userTestMapper.update(userTest);
         return this.searchById(userTest.getId());
+    }
+
+    /**
+     * 修改数据
+     *
+     * @param responseBody ResponseBody 对象
+     * @return 实例对象
+     */
+    @Override
+    public UserTest updateStatusByNaturalkey(ResponseBody responseBody) {
+        this.userTestMapper.updateStatusByNaturalkey(responseBody);
+        return this.searchById(responseBody.getId());
     }
 
     /**

@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ml.timi.mapper.UserMapper">
-    <resultMap id="BaseResultMap" type="com.ml.timi.model.entity.User">
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="login" jdbcType="VARCHAR" property="login"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="pwd" jdbcType="VARCHAR" property="pwd"/>
-        <result column="head_img" jdbcType="VARCHAR" property="headImg"/>
-        <result column="phone" jdbcType="VARCHAR" property="phone"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+
+    <resultMap type="com.ml.timi.model.entity.User" id="UserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="pwd" column="pwd" jdbcType="VARCHAR"/>
+        <result property="headImg" column="head_img" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="login" column="login" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
         <collection property="videoOrderList" ofType="com.ml.timi.model.entity.VideoOrder">
             <result property="id" column="video_id" jdbcType="VARCHAR"/>
             <result property="outTradeNo" column="out_trade_no" jdbcType="VARCHAR"/>
@@ -22,89 +24,223 @@
         </collection>
     </resultMap>
 
-    <sql id="User_Base_Column_List">
+    <sql id="Base_Column_List">
+        id, name, pwd, head_img, phone, create_time, login, status
+   </sql>
 
-        login,
+    <sql id="remake_Column_List_a">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="pwd != null and pwd != ''">
+                pwd,
+            </if>
+            <if test="headImg != null and headImg != ''">
+                head_img,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="login != null and login != ''">
+                login,
+            </if>
+            <if test="status != null and status != ''">
+                status,
+            </if>
+        </trim>
+    </sql>
+
+    <sql id="remake_Column_List_b">
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                #{name ,jdbcType=VARCHAR},
+            </if>
+            <if test="pwd != null and pwd != ''">
+                #{pwd ,jdbcType=VARCHAR},
+            </if>
+            <if test="headImg != null and headImg != ''">
+                #{headImg ,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone ,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime ,jdbcType=TIMESTAMP},
+            </if>
+            <if test="login != null and login != ''">
+                #{login ,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null and status != ''">
+                #{status ,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </sql>
+
+
+    <!--查询单个-->
+    <select id="searchById" resultMap="UserMap">
+        select
+        <include refid="Base_Column_List"/>
+
+        from timi.user
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="searchAllByLimit" resultMap="UserMap">
+        select
+        <include refid="Base_Column_List"/>
+
+        from timi.user
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="search" resultMap="UserMap" parameterType="com.ml.timi.model.entity.User">
+        select
+        u.id ,u.name, u.pwd, u.head_img, u.phone, u.create_time, u.login,
+        vo.id as video_id, vo.out_trade_no, vo.state, vo.create_time, vo.total_fee, vo.video_id, vo.video_title, vo.video_img, vo.user_id
+        from  timi.user u
+        left join video_order vo on u.id = vo.user_id
+        <where>
+            <if test="id != null">
+                and id = #{id ,jdbcType=INTEGER}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name ,jdbcType=VARCHAR}
+            </if>
+            <if test="pwd != null and pwd != ''">
+                and pwd = #{pwd ,jdbcType=VARCHAR}
+            </if>
+            <if test="headImg != null and headImg != ''">
+                and head_img = #{headImg ,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone ,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime ,jdbcType=TIMESTAMP}
+            </if>
+            <if test="login != null and login != ''">
+                and login = #{login ,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status ,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into timi.user
+        <include refid="remake_Column_List_a"/>
+        <include refid="remake_Column_List_b"/>
+    </insert>
+
+
+    <!--批量新增数据-->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into timi.user
+        (
         name,
         pwd,
         head_img,
         phone,
-        create_time
-    </sql>
-
-    <!--注册用户信息-->
-    <insert id="register" parameterType="com.ml.timi.model.entity.User" useGeneratedKeys="true" keyProperty="id">
-        insert into user
-        (<include refid="User_Base_Column_List"/>)
-        value (
-        #{login,jdbcType = VARCHAR},
-        #{name,jdbcType = VARCHAR},
-        #{pwd,jdbcType = VARCHAR},
-        #{headImg,jdbcType = VARCHAR},
-        #{phone,jdbcType = VARCHAR},
-        #{createTime,jdbcType = TIMESTAMP})
-    </insert>
-
-
-    <select id="findByPhone" resultType="com.ml.timi.model.entity.User">
-
-        select *
-        from user
-        where phone = #{phone};
-    </select>
-
-    <select id="searchDataList" resultType="com.ml.timi.model.entity.User">
-
-        select *
-        from user
-        where phone = 'N';
-    </select>
-
-
-    <select id="checkLogin" resultType="com.ml.timi.model.entity.User">
-        select *
-        from user
-        where login = #{login}
-          and pwd = #{pwd};
-    </select>
-
-    <select id="findByUserToken" resultType="com.ml.timi.model.entity.User">
-        select *
-        from user
-        where id = #{userId}
-
-    </select>
-    <!--查询用户信息+用户订单-->
-    <select id="searchByStatus" resultMap="BaseResultMap" resultType="com.ml.timi.model.entity.User" >
-
-        select
-            u.id as user_id,
-            u.name, u.pwd, u.head_img, u.phone, u.create_time, u.login,
-            vo.id as video_id,
-            vo.out_trade_no, vo.state, vo.create_time, vo.total_fee, vo.video_id, vo.video_title, vo.video_img, vo.user_id
-        from user u
-                 left join video_order vo on u.id = vo.user_id
-        where u.phone = 'N';
-
-
-
-    </select>
-
-    <!--批量插入数据信息-->
-    <insert id="insertDataList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        insert into user_test
-        (<include refid="User_Base_Column_List"/>)
-        value
-        <foreach collection="list" item="item" index="index" separator=",">
+        create_time,
+        login,
+        status
+        )
+        values
+        <foreach collection="userList" item="entity" separator=",">
             (
-            #{item.login,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR},
-            #{item.pwd,jdbcType=VARCHAR}, #{item.headImg,jdbcType=VARCHAR},
-            #{item.phone,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}
+            #{entity.name},
+            #{entity.pwd},
+            #{entity.headImg},
+            #{entity.phone},
+            #{entity.createTime},
+            #{entity.login},
+            #{entity.status}
             )
         </foreach>
-
-
     </insert>
 
 
+    <!--批量新增或按主键更新数据-->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into timi.user
+        (
+
+        name,
+        pwd,
+        head_img,
+        phone,
+        create_time,
+        login,
+        status
+        )
+        values
+        <foreach collection="userList" item="entity" separator=",">
+            (
+            #{entity.name},
+            #{entity.pwd},
+            #{entity.headImg},
+            #{entity.phone},
+            #{entity.createTime},
+            #{entity.login},
+            #{entity.status}
+            )
+        </foreach>
+        on duplicate key update
+        name = values(name) ,
+        pwd = values(pwd) ,
+        head_img = values(head_img) ,
+        phone = values(phone) ,
+        create_time = values(create_time) ,
+        login = values(login) ,
+        status = values(status)
+    </insert>
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update timi.user
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name ,jdbcType=VARCHAR},
+            </if>
+            <if test="pwd != null and pwd != ''">
+                pwd = #{pwd ,jdbcType=VARCHAR},
+            </if>
+            <if test="headImg != null and headImg != ''">
+                head_img = #{headImg ,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone ,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime ,jdbcType=TIMESTAMP},
+            </if>
+            <if test="login != null and login != ''">
+                login = #{login ,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status ,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from timi.user
+        where id = #{id}
+    </delete>
+
 </mapper>
+

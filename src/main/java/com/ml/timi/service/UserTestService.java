@@ -1,6 +1,7 @@
 package com.ml.timi.service;
 
 import com.ml.timi.model.entity.UserTest;
+import com.ml.timi.model.log.response.ResponseBody;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -10,7 +11,7 @@ import java.util.List;
  * 用户中间表(UserTest)表服务接口
  *
  * @author Lin
- * @since 2021-08-25 14:52:01
+ * @since 2021-08-27 17:00:50
  */
 @Service
 public interface UserTestService {
@@ -29,7 +30,7 @@ public interface UserTestService {
      * @param id 主键
      * @return 实例对象
      */
-    UserTest searchById(BigInteger id);
+    UserTest searchById(int id);
 
     /**
      * 查询多条数据
@@ -72,6 +73,14 @@ public interface UserTestService {
      */
     UserTest update(UserTest userTest);
 
+
+    /**
+     * 修改数据
+     *
+     * @param responseBody ResponseBody
+     * @return 实例对象
+     */
+    UserTest updateStatusByNaturalkey(ResponseBody responseBody);
     /**
      * 通过主键删除数据
      *
@@ -79,5 +88,6 @@ public interface UserTestService {
      * @return 影响行数
      */
     int deleteById(BigInteger id);
+
 
 }

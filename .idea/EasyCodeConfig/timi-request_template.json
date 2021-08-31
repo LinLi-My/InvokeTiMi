@@ -4,7 +4,7 @@
   "comment" : "请求头日志",
   "templateGroupName" : "Default",
   "fullColumn" : [ {
-    "name" : "batchid",
+    "name" : "batchId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -34,12 +34,12 @@
   }, {
     "name" : "requestTime",
     "comment" : null,
-    "type" : "java.time.LocalDateTime",
+    "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "requestCount",
+    "name" : "requestBodyCount",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -55,7 +55,7 @@
   }, {
     "name" : "responseTime",
     "comment" : null,
-    "type" : "java.time.LocalDateTime",
+    "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
@@ -95,7 +95,7 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "responseBody",
+    "name" : "responseTemplateBody",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -111,7 +111,7 @@
   } ],
   "pkColumn" : null,
   "otherColumn" : null,
-  "savePackageName" : "com.ml.timi.temp",
-  "savePath" : "./src/main/java/com/ml/timi/temp",
+  "savePackageName" : "com.ml.timi",
+  "savePath" : "./src/main/java/com/ml/timi",
   "saveModelName" : "InvokeTiMi"
 }

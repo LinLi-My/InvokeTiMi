@@ -18,6 +18,7 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 @Data
@@ -56,7 +57,7 @@ public class ResponseTemplate {
      * 状态：status
      * 信息：message
      */
-    String responseTemplateBody;
+    List<ResponseBody> responseBody;
 
     public ResponseTemplate() {
     }
@@ -75,6 +76,7 @@ public class ResponseTemplate {
                 ;
     }
 
+
     public static final class ResponseTemplateBuilder {
         LocalDateTime responseTime;
         String responseStatus;
@@ -82,7 +84,7 @@ public class ResponseTemplate {
         int responseCount;
         int responseSuccessCount;
         int responseErrorCount;
-        String responseTemplateBody;
+        List<ResponseBody> responseBody;
         private int id;
         private String batchId;
         private String module;
@@ -139,8 +141,8 @@ public class ResponseTemplate {
             return this;
         }
 
-        public ResponseTemplateBuilder setResponseTemplateBody(String responseTemplateBody) {
-            this.responseTemplateBody = responseTemplateBody;
+        public ResponseTemplateBuilder setResponseBody(List<ResponseBody> responseBody) {
+            this.responseBody = responseBody;
             return this;
         }
 
@@ -155,7 +157,7 @@ public class ResponseTemplate {
             responseTemplate.setResponseCount(responseCount);
             responseTemplate.setResponseSuccessCount(responseSuccessCount);
             responseTemplate.setResponseErrorCount(responseErrorCount);
-            responseTemplate.setResponseTemplateBody(responseTemplateBody);
+            responseTemplate.setResponseBody(responseBody);
             return responseTemplate;
         }
     }

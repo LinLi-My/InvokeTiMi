@@ -1,17 +1,15 @@
 {
-  "name" : "UserTest",
+  "name" : "User",
   "preName" : "",
-  "comment" : "用户中间表",
+  "comment" : "用户表",
   "templateGroupName" : "Default",
   "fullColumn" : [ {
     "name" : "id",
     "comment" : null,
-    "type" : "java.math.BigInteger",
+    "type" : null,
     "shortType" : null,
     "custom" : false,
-    "ext" : {
-      "disable" : false
-    }
+    "ext" : { }
   }, {
     "name" : "name",
     "comment" : null,
@@ -61,24 +59,10 @@
     "shortType" : null,
     "custom" : false,
     "ext" : { }
-  }, {
-    "name" : "message",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "naturalkey",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
   } ],
   "pkColumn" : null,
   "otherColumn" : null,
   "savePackageName" : "com.ml.timi",
   "savePath" : "./src/main/java/com/ml/timi",
-  "saveModelName" : "InvokeTiMi"
+  "saveModelName" : "TiMi"
 }

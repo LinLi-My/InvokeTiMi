@@ -12,7 +12,6 @@ package com.ml.timi;
 
 import com.ml.timi.model.log.request.RequestTemplate;
 import com.ml.timi.utils.SnowTool;
-import org.assertj.core.util.DateUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,6 +22,9 @@ public class Test {
 
 
     public static void main(String[] args) {
+
+       
+
 
         List<Integer> source = Arrays.asList(1, 2, 3);
         List<Integer> dest = Arrays.asList(4, 5, 6);

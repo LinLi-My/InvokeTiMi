@@ -13,7 +13,7 @@ class TiMiApplicationTests {
     void testJWT() {
         User user = new User();
         user.setName("xdclass");
-        user.setId(18);
+        user.setId(18L);
         user.setHeadImg("pp");
 
         String token = JWTUtils.geneJsonWebToken(user);

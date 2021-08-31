@@ -1,6 +1,7 @@
 package com.ml.timi.mapper;
 
 import com.ml.timi.model.entity.UserTest;
+import com.ml.timi.model.log.response.ResponseBody;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * 用户中间表(UserTest)表数据库访问层
  *
  * @author Lin
- * @since 2021-08-25 14:51:59
+ * @since 2021-08-27 17:00:50
  */
 @Mapper
 public interface UserTestMapper {
@@ -31,7 +32,7 @@ public interface UserTestMapper {
      * @param id 主键
      * @return 实例对象
      */
-    UserTest searchById(BigInteger id);
+    UserTest searchById(int id);
 
     /**
      * 查询指定行数据
@@ -73,6 +74,15 @@ public interface UserTestMapper {
      * @return 影响行数
      */
     int update(UserTest userTest);
+
+
+    /**
+     * 修改数据
+     *
+     * @param responseBody ResponseBody对象
+     * @return 影响行数
+     */
+    int updateStatusByNaturalkey(ResponseBody responseBody);
 
     /**
      * 通过主键删除数据

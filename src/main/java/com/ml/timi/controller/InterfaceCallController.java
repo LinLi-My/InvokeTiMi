@@ -17,16 +17,13 @@ import com.ml.timi.config.webservices.WebServiceCallConfig;
 import com.ml.timi.config.webservices.WebServiceCallMethodConfig;
 import com.ml.timi.mapper.UserTestMapper;
 import com.ml.timi.mapper.VideoOrderTestMapper;
-import com.ml.timi.mapper.log.RequestTemplateMapper;
-import com.ml.timi.mapper.UserMapper;
 import com.ml.timi.model.entity.User;
 import com.ml.timi.model.entity.UserTest;
-import com.ml.timi.model.entity.VideoOrder;
 import com.ml.timi.model.entity.VideoOrderTest;
 import com.ml.timi.model.log.request.RequestTemplate;
+import com.ml.timi.model.log.response.ResponseBody;
 import com.ml.timi.model.log.response.ResponseTemplate;
-import com.ml.timi.model.log.response.ResponseTemplateBody;
-import com.ml.timi.service.LogService;
+import com.ml.timi.service.*;
 import com.ml.timi.utils.CommonUtils;
 import com.ml.timi.utils.ExpertionLin;
 import com.ml.timi.utils.JSONUtil;
@@ -42,24 +39,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/interfaceCall")
 public class InterfaceCallController {
 
     @Resource
+    UserService userService;
+    @Resource
     UserTestMapper userTestMapper;
     @Resource
     VideoOrderTestMapper videoOrderTestMapper;
     @Resource
-    LogService logService;
+    ResponseBodyService responseBodyService;
     @Resource
-    RequestTemplateMapper logMapper;
+    ResponseTemplateService responseTemplateService;
     @Resource
-    UserMapper userMapper;
+    RequestTemplateService requestTemplateService;
     @Resource
     public User user;
+    @Resource
+    public UserTestService  userTestService;
     @Resource
     public RequestTemplate requestTemplate;
     @Resource
@@ -128,8 +133,11 @@ public class InterfaceCallController {
         batchId = UUID.randomUUID().toString();
 
 
+        User user01 = new User();
+
+        user01.setStatus("N");
         /** 根据Status：状态查询数据 */
-        List<User> requestBodyList = userMapper.searchByStatus();
+        List<User> requestBodyList = userService.searchByStatus(user01);
         int requestBodyCount = requestBodyList.size();
         if (ObjectUtils.isEmpty(requestBodyList)) {
             return "暂无数据";
@@ -141,10 +149,13 @@ public class InterfaceCallController {
         }.getType());
         /** 遍历List对象集合 */
         for (UserTest userTest : userTestList) {
+            userTest.setNaturalkey(String.valueOf(userTest.getId()));
             /** 插入主表数据到中间表 */
             userTestMapper.insert(userTest);
             /** 获取子表集合并判断空值 */
             List<VideoOrderTest> videoOrderTestList = userTest.getVideoOrderList();
+            /** 过滤集合里主键为空的集合 */
+            videoOrderTestList = videoOrderTestList.stream().filter(s -> Objects.nonNull(s.getOutTradeNo())).collect(Collectors.toList());
             if (ObjectUtils.isNotEmpty(videoOrderTestList)) {
                 /** 插入子表数据到中间表 */
                 videoOrderTestMapper.insertBatch(videoOrderTestList);
@@ -153,6 +164,7 @@ public class InterfaceCallController {
         /**
          * 组装请求数据
          */
+        requestBody = gson.toJson(userTestList);
         requestTemplate = new RequestTemplate.RequestTemplateBuilder()
                 .setBatchId(batchId)                        //批次标识
                 .setModule(Module.INPUT)                    //模块
@@ -170,7 +182,7 @@ public class InterfaceCallController {
         /** 记录请求日志 */
         LOGGER.info(requestTemplate.toString());
         /** 将请求日志插入数据库 */
-        requestTemplate = logService.insertRequestTemplate(requestTemplate);
+        requestTemplateService.insert(requestTemplate);
         try {
             /** 调用请求接口 */
             responseDataBack = client.invoke(methodName, requestData, MD5Encrypt);
@@ -190,7 +202,7 @@ public class InterfaceCallController {
             /** 记录响应 Error 日志 */
             LOGGER.error(responseTemplateError.toString());
             /** 根据 batchId 更新响应 Error 的数据 */
-            logService.updateResponseTemplateError(responseTemplateError);
+            responseTemplateService.update(responseTemplateError);
             throw e;
         }
 
@@ -204,38 +216,19 @@ public class InterfaceCallController {
         LOGGER.info(responseTemplate.toString());
         /** 根据 batchId 更新响应 Sccess 的数据 */
         //1、更新整个响应
-
-        //2、更新响应体
-        List<ResponseTemplateBody> responseTemplateBodyList = gson.fromJson(responseTemplate.getResponseTemplateBody(),
-                new TypeToken<List<ResponseTemplateBody>>() {
-                }.getType());
-
-        for (ResponseTemplateBody responseTemplateBody : responseTemplateBodyList) {
-            String NATURALKEY = responseTemplateBody.getNaturalKey();
-            String STATUS = responseTemplateBody.getStatus();
-            String MESSAGE = responseTemplateBody.getMessage();
+        responseTemplateService.update(responseTemplate);
+        //2、获取响应体，并更新响应体
+        List<ResponseBody>  responseBodyList = responseTemplate.getResponseBody();
+        for (ResponseBody responseBody : responseBodyList) {
+            String NATURALKEY = responseBody.getNaturalkey();
+            String STATUS = responseBody.getStatus();
+            String MESSAGE = responseBody.getMessage();
             if (StringUtils.isNoneBlank(NATURALKEY, STATUS, MESSAGE)) {
                 //根据状态更新原数据状态
-
-                //int aa =
-                //插入日志
-
-                //数据库日志更新
-
-
+                userTestService.updateStatusByNaturalkey(responseBody);
+                LOGGER.info(responseBody.toString());
             }
         }
-
-
-
-      /*  responseTemplate.getResponseStatus();
-        responseTemplate.getResponseStatusMessage();
-        responseTemplate.getResponseCount();
-        responseTemplate.getResponseErrorCount();
-        responseTemplate.getResponseSuccessCount();
-        responseTemplate.getResponseTime();*/
-
-
         return "1";
 
     }

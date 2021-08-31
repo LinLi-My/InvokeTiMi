@@ -10,10 +10,13 @@
         <result property="phone" column="phone" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="login" column="login" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="message" column="message" jdbcType="VARCHAR"/>
+        <result property="naturalkey" column="naturalkey" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, name, pwd, head_img, phone, create_time, login    </sql>
+        id, name, pwd, head_img, phone, create_time, login, status, message, naturalkey    </sql>
 
     <sql id="remake_Column_List_a">
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -34,6 +37,15 @@
             </if>
             <if test="login != null and login != ''">
                 login,
+            </if>
+            <if test="status != null and status != ''">
+                status,
+            </if>
+            <if test="message != null and message != ''">
+                message,
+            </if>
+            <if test="naturalkey != null and naturalkey != ''">
+                naturalkey,
             </if>
         </trim>
     </sql>
@@ -58,6 +70,15 @@
             <if test="login != null and login != ''">
                 #{login ,jdbcType=VARCHAR},
             </if>
+            <if test="status != null and status != ''">
+                #{status ,jdbcType=VARCHAR},
+            </if>
+            <if test="message != null and message != ''">
+                #{message ,jdbcType=VARCHAR},
+            </if>
+            <if test="naturalkey != null and naturalkey != ''">
+                #{naturalkey ,jdbcType=VARCHAR},
+            </if>
         </trim>
     </sql>
 
@@ -65,7 +86,7 @@
     <!--查询单个-->
     <select id="searchById" resultMap="UserTestMap">
         select
-        (<include refid="Base_Column_List"/>)
+        <include refid="Base_Column_List"/>
 
         from timi.user_test
         where id = #{id}
@@ -74,7 +95,7 @@
     <!--查询指定行数据-->
     <select id="searchAllByLimit" resultMap="UserTestMap">
         select
-        (<include refid="Base_Column_List"/>)
+        <include refid="Base_Column_List"/>
 
         from timi.user_test
         limit #{offset}, #{limit}
@@ -83,7 +104,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="search" resultMap="UserTestMap">
         select
-        (<include refid="Base_Column_List"/>)
+        <include refid="Base_Column_List"/>
 
         from timi.user_test
         <where>
@@ -108,6 +129,15 @@
             <if test="login != null and login != ''">
                 and login = #{login ,jdbcType=VARCHAR}
             </if>
+            <if test="status != null and status != ''">
+                and status = #{status ,jdbcType=VARCHAR}
+            </if>
+            <if test="message != null and message != ''">
+                and message = #{message ,jdbcType=VARCHAR}
+            </if>
+            <if test="naturalkey != null and naturalkey != ''">
+                and naturalkey = #{naturalkey ,jdbcType=VARCHAR}
+            </if>
         </where>
     </select>
 
@@ -123,24 +153,73 @@
     <!--批量新增数据-->
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
         insert into timi.user_test
-        <include refid="remake_Column_List_a"/>
-
-        <foreach collection="entities" item="entity" separator=",">
-            <include refid="remake_Column_List_b"/>
+        (
+        name,
+        pwd,
+        head_img,
+        phone,
+        create_time,
+        login,
+        status,
+        message,
+        naturalkey
+        )
+        values
+        <foreach collection="userTestList" item="entity" separator=",">
+            (
+            #{entity.name},
+            #{entity.pwd},
+            #{entity.headImg},
+            #{entity.phone},
+            #{entity.createTime},
+            #{entity.login},
+            #{entity.status},
+            #{entity.message},
+            #{entity.naturalkey}
+            )
         </foreach>
     </insert>
 
 
     <!--批量新增或按主键更新数据-->
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into timi.user_test(name, pwd, head_img, phone, create_time, login)
+        insert into timi.user_test
+        (
+
+        name,
+        pwd,
+        head_img,
+        phone,
+        create_time,
+        login,
+        status,
+        message,
+        naturalkey
+        )
         values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.name}, #{entity.pwd}, #{entity.headImg}, #{entity.phone}, #{entity.createTime}, #{entity.login})
+        <foreach collection="userTestList" item="entity" separator=",">
+            (
+            #{entity.name},
+            #{entity.pwd},
+            #{entity.headImg},
+            #{entity.phone},
+            #{entity.createTime},
+            #{entity.login},
+            #{entity.status},
+            #{entity.message},
+            #{entity.naturalkey}
+            )
         </foreach>
         on duplicate key update
-        name = values(name) , pwd = values(pwd) , head_img = values(head_img) , phone = values(phone) , create_time =
-        values(create_time) , login = values(login)
+        name = values(name) ,
+        pwd = values(pwd) ,
+        head_img = values(head_img) ,
+        phone = values(phone) ,
+        create_time = values(create_time) ,
+        login = values(login) ,
+        status = values(status) ,
+        message = values(message) ,
+        naturalkey = values(naturalkey)
     </insert>
 
 
@@ -166,9 +245,29 @@
             <if test="login != null and login != ''">
                 login = #{login ,jdbcType=VARCHAR},
             </if>
+            <if test="status != null and status != ''">
+                status = #{status ,jdbcType=VARCHAR},
+            </if>
+            <if test="message != null and message != ''">
+                message = #{message ,jdbcType=VARCHAR},
+            </if>
+            <if test="naturalkey != null and naturalkey != ''">
+                naturalkey = #{naturalkey ,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id}
     </update>
+
+
+    <!--根据业务主键修改状态-->
+    <update id="updateStatusByNaturalkey">
+        update  timi.user_test
+        set
+            message =  #{message ,jdbcType=VARCHAR},
+            status = #{status ,jdbcType=VARCHAR}
+        where naturalkey = #{naturalkey}
+    </update>
+
 
     <!--通过主键删除-->
     <delete id="deleteById">
