@@ -66,12 +66,12 @@ public class ResponseTemplate {
     @Override
     public String toString() {
 
-        return  "\n" + "【 接口调用失败日志" +
+        return  "\n" + "【 接口响应日志" +
                 "\n" + "批次标识：[" + batchId + "]    " +
                 "模块：[" + module + "]    " +
                 "响应时间：[" + responseTime + "]    " +
                 "\n" + "响应状态：[" + responseStatus + "]    " +
-                "响应状态信息：[" + responseStatusMessage + "]    " +
+                "\n" + "响应状态信息：[" + responseStatusMessage + "]    " +
                 "\n" + "】"
                 ;
     }

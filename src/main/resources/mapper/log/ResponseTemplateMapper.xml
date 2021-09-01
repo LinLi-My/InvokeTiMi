@@ -79,12 +79,19 @@
 
 
     <!--查询单个-->
-    <select id="searchById" resultMap="ResponseTemplateMap">
+    <select id="searchByBatchId" resultMap="ResponseTemplateMap">
         select
         <include refid="Base_Column_List"/>
 
         from timi.log_message_client
-        where id = #{id}
+        <where>
+        <if test="batchId != null and batchId != ''">
+            and batch_id = #{batchId ,jdbcType=VARCHAR}
+        </if>
+        <if test="id != null">
+            and id = #{id ,jdbcType=INTEGER}
+        </if>
+        </where>
     </select>
 
     <!--查询指定行数据-->
@@ -243,6 +250,15 @@
 
         </set>
         where batch_id = #{batchId}
+    </update>
+
+    <!--通过主键修改数据-->
+    <update id="updateResponseBody" parameterType="java.util.Map">
+        update  timi.log_message_client
+        set
+            response_body = #{responseBody }
+
+        where batch_id = #{batchId ,jdbcType=VARCHAR}
     </update>
 
     <!--通过主键删除-->

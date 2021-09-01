@@ -4,6 +4,7 @@ import com.ml.timi.model.log.response.ResponseTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 请求头日志(ResponseTemplate)表服务接口
@@ -25,10 +26,10 @@ public interface ResponseTemplateService {
     /**
      * 通过ID查询单条数据
      *
-     * @param id 主键
+     * @param responseTemplate
      * @return 实例对象
      */
-    ResponseTemplate searchById(Integer id);
+    ResponseTemplate searchByBatchId(ResponseTemplate responseTemplate);
 
     /**
      * 查询多条数据
@@ -70,6 +71,14 @@ public interface ResponseTemplateService {
      * @return 实例对象
      */
     ResponseTemplate update(ResponseTemplate responseTemplate);
+
+    /**
+     * 修改数据
+     *
+     * @param responseBody String字符串
+     * @return 实例对象
+     */
+    int updateResponseBody(Map<String, String> responseBody);
 
     /**
      * 通过主键删除数据

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 请求头日志(ResponseTemplate)表数据库访问层
@@ -25,12 +26,12 @@ public interface ResponseTemplateMapper {
     List<ResponseTemplate> search(ResponseTemplate responseTemplate);
 
     /**
-     * 通过ID查询单条数据
+     * 通过BatchId查询单条数据
      *
-     * @param id 主键
+     * @param responseTemplate ResponseTemplate
      * @return 实例对象
      */
-    ResponseTemplate searchById(Integer id);
+    ResponseTemplate searchByBatchId(ResponseTemplate responseTemplate);
 
     /**
      * 查询指定行数据
@@ -72,6 +73,14 @@ public interface ResponseTemplateMapper {
      * @return 影响行数
      */
     int update(ResponseTemplate responseTemplate);
+
+    /**
+     * 修改数据
+     *
+     * @param responseBodyMap String对象
+     * @return 影响行数
+     */
+    int updateResponseBody(Map<String,String> responseBodyMap);
 
     /**
      * 通过主键删除数据

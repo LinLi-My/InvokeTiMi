@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 请求头日志(ResponseTemplate)表服务实现类
@@ -36,12 +37,12 @@ public class ResponseTemplateServiceImpl implements ResponseTemplateService {
     /**
      * 通过ID查询单条数据
      *
-     * @param id 主键
+     * @param responseTemplate
      * @return 实例对象
      */
     @Override
-    public ResponseTemplate searchById(Integer id) {
-        return this.responseTemplateMapper.searchById(id);
+    public ResponseTemplate searchByBatchId(ResponseTemplate responseTemplate) {
+        return this.responseTemplateMapper.searchByBatchId(responseTemplate);
     }
 
     /**
@@ -99,7 +100,18 @@ public class ResponseTemplateServiceImpl implements ResponseTemplateService {
     @Override
     public ResponseTemplate update(ResponseTemplate responseTemplate) {
         this.responseTemplateMapper.update(responseTemplate);
-        return this.searchById(responseTemplate.getId());
+        return this.searchByBatchId(responseTemplate);
+    }
+
+    /**
+     * 修改数据
+     *
+     * @param responseBodyMap String对象
+     * @return 实例对象
+     */
+    @Override
+    public int updateResponseBody(Map<String,String> responseBodyMap) {
+        return  this.responseTemplateMapper.updateResponseBody(responseBodyMap);
     }
 
     /**

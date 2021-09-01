@@ -24,7 +24,8 @@ public class ExpertionLin {
     @Override
     public String toString() {
         return  messageL +
-                "\nat " + classNameL + "." + methodNameL + "(" + fileNameL + ":" + lineNumberL +")";
+                "\n"+
+                " at " + classNameL + "." + methodNameL + "(" + fileNameL + ":" + lineNumberL +")";
     }
 
     public static String Infor(Exception e) {

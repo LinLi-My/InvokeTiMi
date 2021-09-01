@@ -80,7 +80,7 @@ public interface UserTestService {
      * @param responseBody ResponseBody
      * @return 实例对象
      */
-    UserTest updateStatusByNaturalkey(ResponseBody responseBody);
+    int updateStatusByNaturalkey(ResponseBody responseBody);
     /**
      * 通过主键删除数据
      *

@@ -111,9 +111,8 @@ public class UserTestServiceImpl implements UserTestService {
      * @return 实例对象
      */
     @Override
-    public UserTest updateStatusByNaturalkey(ResponseBody responseBody) {
-        this.userTestMapper.updateStatusByNaturalkey(responseBody);
-        return this.searchById(responseBody.getId());
+    public int updateStatusByNaturalkey(ResponseBody responseBody) {
+        return this.userTestMapper.updateStatusByNaturalkey(responseBody);
     }
 
     /**
