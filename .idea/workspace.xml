@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79caed4e-e507-42de-ac94-009f0baf53e8" name="更改" comment="20210831">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/config/template/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/config/template/LogType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ml/timi/controller/InterfaceCallController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/controller/InterfaceCallController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ml/timi/mapper/log/ResponseTemplateMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/mapper/log/ResponseTemplateMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ml/timi/model/log/response/ResponseTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/model/log/response/ResponseTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ml/timi/service/ResponseTemplateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/service/ResponseTemplateService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ml/timi/service/UserTestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/service/UserTestService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ml/timi/service/impl/ResponseTemplateServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/service/impl/ResponseTemplateServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ml/timi/service/impl/UserTestServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/service/impl/UserTestServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ml/timi/utils/ExpertionLin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/utils/ExpertionLin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/log/ResponseTemplateMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/log/ResponseTemplateMapper.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +68,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -87,6 +81,7 @@
       <recent name="com.ml.timi.model.log.response" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ml.timi.config.template" />
       <recent name="com.ml.timi.utils" />
     </key>
   </component>
@@ -140,6 +135,7 @@
       <workItem from="1630379320089" duration="1275000" />
       <workItem from="1630380656066" duration="17466000" />
       <workItem from="1630462770619" duration="11223000" />
+      <workItem from="1630500904035" duration="8744000" />
     </task>
     <task id="LOCAL-00001" summary="20210818">
       <created>1629276052384</created>
@@ -192,5 +188,20 @@
     <MESSAGE value="20210826" />
     <MESSAGE value="20210831" />
     <option name="LAST_COMMIT_MESSAGE" value="20210831" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ml/timi/controller/InterfaceCallController.java</url>
+          <line>99</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

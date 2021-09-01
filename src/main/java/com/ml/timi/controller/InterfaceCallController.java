@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
+import com.ml.timi.config.template.LogType;
 import com.ml.timi.config.template.Message;
 import com.ml.timi.config.template.Module;
 import com.ml.timi.config.template.Status;
@@ -145,7 +146,7 @@ public class InterfaceCallController {
         /** 将请求日志插入数据库 */
         requestTemplateService.insert(requestTemplate);
         /** 记录请求日志 */
-        LOGGER.info(requestTemplate.toString());
+        LOGGER.info(LogType.Insert_RequestTemplate_Log +requestTemplate.toString());
 
 
         try {
@@ -168,7 +169,7 @@ public class InterfaceCallController {
             /** 根据 batchId 更新响应 Error 的数据 */
             responseTemplateService.update(responseTemplateError);
             /** 记录响应 Error 日志 */
-            LOGGER.error(responseTemplateError.toString());
+            LOGGER.error(LogType.Insert_ResponseTemplate_Log +responseTemplateError.toString());
 
             throw e;
         }
@@ -179,14 +180,10 @@ public class InterfaceCallController {
         responseData = responseDataBack[0].toString();
         /** 将响应数据转化为 实体对象 */
         responseTemplate = gson.fromJson(responseData, ResponseTemplate.class);
-        /** 记录响应日志 */
-        LOGGER.info(responseTemplate.toString());
-        /** 根据 batchId 更新响应 Sccess 的数据 */
-        //1、更新整个响应
-        responseTemplateService.update(responseTemplate);
-        //2、获取响应体，并更新响应体
+        //1、获取响应体，并更新响应体
         List<ResponseBody> responseBodyList = responseTemplate.getResponseBody();
         if (ObjectUtils.isNotEmpty(responseBodyList)) {
+
             String responseBodyListJson = gson.toJson(responseBodyList);
             Map<String, String> responseBodyMap = new HashMap<>();
             responseBodyMap.put("batchId", batchId);
@@ -195,9 +192,15 @@ public class InterfaceCallController {
             for (ResponseBody responseBody : responseBodyList) {
                 //根据状态更新原数据状态
                 userTestService.updateStatusByNaturalkey(responseBody);
-                LOGGER.info(responseBody.toString());
+                LOGGER.info(LogType.Update_ResponseBody_Log +responseBody.toString());
             }
         }
+        /** 记录响应日志 */
+
+        LOGGER.info(LogType.Update_ResponseTemplate_Log +responseTemplate.toString());
+        /** 根据 batchId 更新响应 Sccess 的数据 */
+        //2、更新整个响应
+        responseTemplateService.update(responseTemplate);
         LOGGER.info(endLogInfo);
         return endLogInfo;
 
