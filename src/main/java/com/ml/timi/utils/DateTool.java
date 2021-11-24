@@ -1,6 +1,3 @@
-
-
-
 package com.ml.timi.utils;
 
 import java.time.LocalDate;
@@ -8,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ClassName:      DateTool
@@ -19,9 +18,9 @@ import java.time.temporal.ChronoUnit;
 public class DateTool {
 
     /** 计算时间单位到年 */
-    public  static final String UNIT_YEARS = "YEARS";
+    public static final String UNIT_YEARS = "YEARS";
     /** 计算时间单位到小时 */
-    public  static final String UNIT_HOURS = "HOURS";
+    public static final String UNIT_HOURS = "HOURS";
 
     static DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     static DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -75,6 +74,8 @@ public class DateTool {
         return LocalTime.parse(localTime, time);
     }
 
+    public static String TimeCalculation(LocalDateTime startLocalDateTime,LocalDateTime endLocalDateTime, String unit) {return null;}
+
     /**
      * Method               TimeCalculation
      * Description          时间差计算
@@ -86,7 +87,8 @@ public class DateTool {
      * @param               unit                单位
      * @return java.lang.String
      */
-    public static String TimeCalculation(LocalDateTime startLocalDateTime, LocalDateTime endLocalDateTime, String unit) {
+    public static String TimeCalculation(LocalDateTime startLocalDateTime, String...unit) {
+        LocalDateTime endLocalDateTime = LocalDateTime.now();
         LocalDateTime tempDateTime = LocalDateTime.from(startLocalDateTime);
 
         if (unit.equals(UNIT_YEARS)) {
@@ -109,13 +111,13 @@ public class DateTool {
             tempDateTime = tempDateTime.plusSeconds(seconds);
 
             long NANOS = tempDateTime.until(endLocalDateTime, ChronoUnit.NANOS);
-            return "[" +years + " 年]  " +
-                    "[" +months + " 月]  " +
-                    "[" +days + " 天]  " +
-                    "[" +hours + " 时]  " +
-                    "[" +minutes + " 分]  " +
-                    "[" +seconds + " 秒]  " +
-                    "[" +NANOS + " 纳秒]  ";
+            return "[" + years + " 年]  " +
+                    "[" + months + " 月]  " +
+                    "[" + days + " 天]  " +
+                    "[" + hours + " 时]  " +
+                    "[" + minutes + " 分]  " +
+                    "[" + seconds + " 秒]  " +
+                    "[" + NANOS + " 纳秒]  ";
         } else if (unit.equals(UNIT_HOURS)) {
             long hours = tempDateTime.until(endLocalDateTime, ChronoUnit.HOURS);
             tempDateTime = tempDateTime.plusHours(hours);
@@ -127,7 +129,7 @@ public class DateTool {
             tempDateTime = tempDateTime.plusSeconds(seconds);
 
             long NANOS = tempDateTime.until(endLocalDateTime, ChronoUnit.NANOS);
-            return "[" + hours + " 时]  " +"[" + minutes + " 分]  " +"[" + seconds + " 秒]" +"[" + NANOS + " 纳秒]";
+            return "[" + hours + " 时]  " + "[" + minutes + " 分]  " + "[" + seconds + " 秒]" + "[" + NANOS + " 纳秒]";
         }
         return "null";
     }
