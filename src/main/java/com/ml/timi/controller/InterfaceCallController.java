@@ -10,6 +10,7 @@ import com.ml.timi.config.template.Module;
 import com.ml.timi.config.template.Status;
 import com.ml.timi.config.webservices.WebServiceCallConfig;
 import com.ml.timi.config.webservices.WebServiceCallMethodConfig;
+import com.ml.timi.interceptor.LoginInterceptor;
 import com.ml.timi.model.entity.User;
 import com.ml.timi.model.entity.UserTest;
 import com.ml.timi.model.entity.VideoOrderTest;
@@ -94,6 +95,7 @@ public class InterfaceCallController {
     public String callTestWbeServiceList() throws Exception {
         URL = WebServiceCallConfig.TestWebService;
         client = WebServiceCallConfig.call(URL);
+        client.getOutInterceptors().add(new LoginInterceptor("Lin", "Lin1"));
         methodName = WebServiceCallMethodConfig.registerList;
         batchId = UUID.randomUUID().toString();
         endLogInfo = batchId + "-" + Module.INPUT + "：数据已处理";
