@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="79caed4e-e507-42de-ac94-009f0baf53e8" name="更改" comment="20210831">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/config/template/LogType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ml/timi/controller/InterfaceCallController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ml/timi/controller/InterfaceCallController.java" afterDir="false" />
-    </list>
+    <list default="true" id="79caed4e-e507-42de-ac94-009f0baf53e8" name="更改" comment="20220207" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -187,7 +182,8 @@
     <MESSAGE value="20210818" />
     <MESSAGE value="20210826" />
     <MESSAGE value="20210831" />
-    <option name="LAST_COMMIT_MESSAGE" value="20210831" />
+    <MESSAGE value="20220207" />
+    <option name="LAST_COMMIT_MESSAGE" value="20220207" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
