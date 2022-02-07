@@ -64,6 +64,7 @@ public class RequestTemplateServiceImpl implements RequestTemplateService {
      */
     @Override
     public int insert(RequestTemplate requestTemplate) {
+
         return this.requestTemplateMapper.insert(requestTemplate);
 
     }

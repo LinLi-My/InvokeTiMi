@@ -14,10 +14,16 @@ public class Status {
      * 成功
      */
     public static final String SUCCESS = "SUCCESS";
+
     /**
      * 失败
      */
     public static final String ERROR = "ERROR";
+
+    /**
+     * 待下传
+     */
+    public static final String No_Down = "N";
 
 
 

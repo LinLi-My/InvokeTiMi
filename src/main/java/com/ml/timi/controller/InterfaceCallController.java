@@ -10,6 +10,7 @@ import com.ml.timi.config.template.Module;
 import com.ml.timi.config.template.Status;
 import com.ml.timi.config.webservices.WebServiceCallConfig;
 import com.ml.timi.config.webservices.WebServiceCallMethodConfig;
+import com.ml.timi.interceptor.LoginInterceptor;
 import com.ml.timi.model.entity.User;
 import com.ml.timi.model.entity.UserTest;
 import com.ml.timi.model.entity.VideoOrderTest;
@@ -40,23 +41,24 @@ public class InterfaceCallController {
 
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
+    @Resource
+    private UserService userService;
     @Resource
     private User userSearchByStatus;
     @Resource
     private UserTestService userTestService;
     @Resource
     private VideoOrderTestService videoOrderTestService;
+
     @Resource
     private RequestTemplate requestTemplate;
     @Resource
+    private RequestTemplateService requestTemplateService;
+    @Resource
     private ResponseTemplate responseTemplate;
     @Resource
-    private UserService userService;
-    @Resource
     private ResponseTemplateService responseTemplateService;
-    @Resource
-    private RequestTemplateService requestTemplateService;
+
     /** 动态调用接口方法 */
     private String methodName;
     /** 调用接口地址 */
@@ -90,14 +92,16 @@ public class InterfaceCallController {
             .registerTypeAdapter(JsonElement.class, new LocalDateTimeAdapter())     //反序列化LocalDateTime(String——>LocalDateTime)的解析
             .create();
 
+
     @RequestMapping("callTestWebServiceList")
     public String callTestWbeServiceList() throws Exception {
         URL = WebServiceCallConfig.TestWebService;
         client = WebServiceCallConfig.call(URL);
+        client.getOutInterceptors().add(new LoginInterceptor("Lin", "Lin1"));
         methodName = WebServiceCallMethodConfig.registerList;
         batchId = UUID.randomUUID().toString();
         endLogInfo = batchId + "-" + Module.INPUT + "：数据已处理";
-        userSearchByStatus.setStatus("N");
+        userSearchByStatus.setStatus(Status.No_Down);
         /** 根据Status：状态查询数据 */
         List<User> requestBodyList = userService.searchByStatus(userSearchByStatus);
         requestBodyCount = requestBodyList.size();
@@ -176,6 +180,7 @@ public class InterfaceCallController {
 
             throw e;
         }
+
 
         /**
          * 响应 Success 处理响应数据

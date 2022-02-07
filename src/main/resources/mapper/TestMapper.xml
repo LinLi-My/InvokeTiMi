@@ -6,7 +6,6 @@
         <result column=" ip_address" jdbcType="VARCHAR" property="ipAddress"/>
         <result column=" log_operation_type" jdbcType="VARCHAR" property="logOperationType"/>
         <result column=" log_module" jdbcType="VARCHAR" property="logModule"/>
-
         <result column=" operation_time" jdbcType="TIMESTAMP" property="operationTime"/>
         <result column=" operator" jdbcType="VARCHAR" property="operator"/>
         <result column=" log_directory" jdbcType="VARCHAR" property="logDirectory"/>
